@@ -2,7 +2,8 @@ package io.vacco.jcwt;
 
 public class JSineSignal {
   public static double[] signalR = {
-      0.0, 0.19509032201612825,
+      0.0,
+      0.19509032201612825,
       0.3826834323650898,
       0.5555702330196022,
       0.7071067811865475,

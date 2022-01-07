@@ -7,8 +7,8 @@ matrix = np.rot90(matrix)
 
 fig, ax = plt.subplots()
 im = plt.imshow(
-    matrix, cmap='viridis', interpolation='bicubic',
+    matrix, cmap='viridis', interpolation='nearest',
     origin='upper', aspect='auto',
-    vmin=0.0, vmax=0.5
+    vmin=-0.1, vmax=0.1
 )
 plt.show()
