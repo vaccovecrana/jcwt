@@ -13,3 +13,7 @@ implementation("io.vacco.jcwt:jcwt:0.1.0")
 Currently, only the Morlet wavelet is implemented.
 
 PRs and improvements are welcome.
+
+## Resources
+
+- [framerate-independent-low-pass-filter](http://phrogz.net/js/framerate-independent-low-pass-filter.html)
