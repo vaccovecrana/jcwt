@@ -3,13 +3,9 @@ package io.vacco.jcwt;
 import com.esotericsoftware.jsonbeans.Json;
 import j8spec.junit.J8SpecRunner;
 import org.junit.runner.RunWith;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Arrays;
 
-import static io.vacco.jcwt.JSineSignal.*;
 import static j8spec.J8Spec.*;
 
 @RunWith(J8SpecRunner.class)
@@ -27,9 +23,8 @@ public class JCwtSpec {
 
   static {
     it("Can perform CWT analysis on a sine wave signal", () -> {
-      Json j = new Json();
-      double[] eas = j.fromJson(double[].class, new File("./src/test/resources/samples-eas.json"));
-
+      Json js = new Json();
+      double[] eas = js.fromJson(double[].class, new File("./src/test/resources/samples-eas.json"));
       // double[] signalI = new double[signalR.length];
 
       double[] sr, si;
@@ -37,14 +32,26 @@ public class JCwtSpec {
       sr = padPow2(eas);
       si = new double[sr.length];
 
-      JCwt.JCwtWorkBuffers buffers = JCwt.JCwtWorkBuffers.forSignal(sr.length, 8, 2);
+      JCwt.JCwtWorkBuffers buffers = JCwt.JCwtWorkBuffers.forSignal(sr.length, 32, 4);
       File spectrum = new File("./build/cwt-scalogram.csv");
       PrintWriter p = new PrintWriter(new FileWriter(spectrum));
 
+      JCIirBuffer acc = new JCIirBuffer(buffers.rOut.length, 1);
+
       JCwt.cwtMorlet(sr, si, buffers, Math.PI * 2);
-      for (double[] b : buffers.rOut) {
-        p.println(Arrays.toString(b).replace("[", "").replace("]", ""));
+
+      double[] timeBuff = new double[buffers.rOut.length];
+
+      for (int j = 0; j < buffers.rOut[0].length; j++) {
+        for (int k = 0; k < timeBuff.length; k++) {
+          timeBuff[k] = buffers.rOut[k][j];
+        }
+        acc.update(timeBuff);
+        if (j % 8 == 0) { // timeBuff
+          p.println(Arrays.toString(acc.out).replace("[", "").replace("]", ""));
+        }
       }
+
       p.close();
     });
   }

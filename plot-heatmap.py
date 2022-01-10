@@ -9,6 +9,7 @@ fig, ax = plt.subplots()
 im = plt.imshow(
     matrix, cmap='viridis', interpolation='nearest',
     origin='upper', aspect='auto',
-    vmin=-0.1, vmax=0.1
+    vmin=-0.001, vmax=0.001
+    # vmin=-0.5, vmax=0.5
 )
 plt.show()
